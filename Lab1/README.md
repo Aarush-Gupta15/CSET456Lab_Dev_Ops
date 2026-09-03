@@ -1,68 +1,105 @@
-# LAB-1: Mining and Profiling a Software Repository
+# CSET456 – DevOps Lab 1
 
-**Course:** CSET456 – DevOps  
-**Lab:** 1  
-**Repository Analyzed:** [psf/requests](https://github.com/psf/requests)
+## Mining and Profiling a Software Repository
 
----
+### 1. Objective
 
-## 1. Objective
+The objective of this lab is to mine and profile a software repository using Git and Python.
 
-The objective of this lab is to mine and profile a software repository using Python and Git.
-
-The analysis covers:
+The analysis focuses on:
 
 - Repository inventory
-- Source-code identification
-- Lines of Code (LOC)
+- Number of files and directories
 - Programming languages
+- Lines of Code (LOC)
 - File-type distribution
-- Largest source files
+- Largest source-code files
 - File-level metrics
 - Git commit history
-- Contributors
-- Frequently changed files
+- Contributor activity
+- Frequently modified files
 - Monthly commit activity
-- Code additions and deletions
+- File additions and deletions
+
+The repository analyzed in this lab is **Requests**, a popular Python HTTP library.
 
 ---
 
 ## 2. Repository Used
 
-The repository analyzed in this lab is the Python Requests library:
-
 **Repository:** `psf/requests`
 
-The repository was cloned locally and analyzed using a Python mining script and Git commands.
+**GitHub:** https://github.com/psf/requests
+
+The repository was cloned locally and analyzed using a custom Python mining script.
 
 ---
 
-## 3. Repository Structure
+## 3. Lab Directory Structure
 
-The Lab 1 directory is organized as follows:
+The Lab 1 files are organized as follows:
 
 ```text
 Lab1/
 ├── README.md
-└── requests/
-    ├── mining/
-    │   ├── file_metrics.csv
-    │   ├── git_history.csv
-    │   └── repository_stats.json
+├── Data/
+│   └── Requests repository
+│       ├── .github/
+│       ├── docs/
+│       ├── src/
+│       ├── tests/
+│       ├── setup.py
+│       ├── pyproject.toml
+│       ├── README.md
+│       └── ...
+│
+├── Output/
+│   ├── file_metrics.csv
+│   ├── git_history.csv
+│   └── repository_stats.json
+│
+└── src/
     └── mine_repository.py
 ```
 
-## 4. Repository Inventory
+### Folder Description
 
-| Metric            |       Result |
-| ----------------- | -----------: |
-| Repository        | psf/requests |
-| Total Files       |          128 |
-| Source-Code Files |           39 |
-| Directories       |           25 |
-| Total LOC         |        9,875 |
+| Folder/File | Description                                        |
+| ----------- | -------------------------------------------------- |
+| `Data/`     | Contains the Requests repository used for analysis |
+| `Output/`   | Contains generated CSV and JSON analysis results   |
+| `src/`      | Contains the Python mining script                  |
+| `README.md` | Documentation and findings of the lab              |
 
-## 5. Programming Languages
+---
+
+# 4. Repository Inventory
+
+The mining script analyzed the current contents of the Requests repository.
+
+### Inventory Results
+
+| Metric                 |         Result |
+| ---------------------- | -------------: |
+| Repository             | `psf/requests` |
+| Total Files            |        **128** |
+| Source-Code Files      |         **39** |
+| Directories            |         **25** |
+| Total LOC              |      **9,875** |
+| Total Commits          |      **6,494** |
+| Contributor Identities |        **841** |
+
+### LOC Definition
+
+For this lab, **LOC (Lines of Code)** is calculated as the number of **non-empty lines** in a file.
+
+Blank lines are not counted.
+
+---
+
+# 5. Programming Languages
+
+The repository contains the following detected programming/source languages:
 
 | Language  | Number of Files |
 | --------- | --------------: |
@@ -71,79 +108,150 @@ Lab1/
 | CSS       |               1 |
 | **Total** |          **39** |
 
-## 6. File-Type Distribution
+Python is the dominant programming language in the repository.
 
-| File Type    | Count |
-| ------------ | ----: |
-| No extension |    18 |
-| `.rst`       |    16 |
-| `.md`        |    13 |
-| `.yml`       |    10 |
-| `.png`       |     5 |
-| `.key`       |     4 |
-| `.cnf`       |     4 |
-| `.pem`       |     3 |
-| `.csr`       |     3 |
-| `.yaml`      |     2 |
-| `.txt`       |     2 |
-| `.toml`      |     1 |
-| `.in`        |     1 |
-| `.ini`       |     1 |
-| `.ai`        |     1 |
-| `.svg`       |     1 |
-| `.crt`       |     1 |
-| `.srl`       |     1 |
-| `.bat`       |     1 |
-| `.html`      |     1 |
-| `.css`       |     1 |
-| `.typed`     |     1 |
-| `.py`        |    37 |
+---
 
-## 7.Largest Source Files
+# 6. File-Type Distribution
 
-| Rank | File                       |   LOC | Size (Bytes) |
-| ---: | -------------------------- | ----: | -----------: |
-|    1 | `tests/test_requests.py`   | 2,597 |      108,534 |
-|    2 | `src/requests/models.py`   |   988 |       41,462 |
-|    3 | `src/requests/utils.py`    |   915 |       36,061 |
-|    4 | `tests/test_utils.py`      |   875 |       31,454 |
-|    5 | `src/requests/sessions.py` |   758 |       34,072 |
-|    6 | `src/requests/adapters.py` |   634 |       27,992 |
-|    7 | `src/requests/cookies.py`  |   503 |       21,504 |
-|    8 | `tests/test_lowlevel.py`   |   329 |       15,343 |
-|    9 | `docs/conf.py`             |   291 |       12,148 |
-|   10 | `src/requests/auth.py`     |   283 |       12,107 |
+The repository contains multiple types of source, documentation, configuration, certificate, and other files.
 
-## 8. File-Level Metrics
+| Extension    | Number of Files |
+| ------------ | --------------: |
+| `.py`        |              37 |
+| `.rst`       |              16 |
+| `.md`        |              13 |
+| `.yml`       |              10 |
+| `.png`       |               5 |
+| `.key`       |               4 |
+| `.cnf`       |               4 |
+| `.pem`       |               3 |
+| `.csr`       |               3 |
+| `.yaml`      |               2 |
+| `.txt`       |               2 |
+| `.html`      |               1 |
+| `.css`       |               1 |
+| `.toml`      |               1 |
+| `.in`        |               1 |
+| `.ini`       |               1 |
+| `.ai`        |               1 |
+| `.svg`       |               1 |
+| `.crt`       |               1 |
+| `.srl`       |               1 |
+| `.bat`       |               1 |
+| `.typed`     |               1 |
+| No extension |              18 |
 
-A CSV dataset was generated containing metrics for every identified source-code file.
+The `.py` extension is the most common source-code file type.
 
-CSV Columns
+---
+
+# 7. Largest Source-Code Files
+
+The following are the largest source files based on non-empty LOC:
+
+| Rank | File                       | Language |   LOC |
+| ---: | -------------------------- | -------- | ----: |
+|    1 | `tests/test_requests.py`   | Python   | 2,597 |
+|    2 | `src/requests/models.py`   | Python   |   988 |
+|    3 | `src/requests/utils.py`    | Python   |   915 |
+|    4 | `tests/test_utils.py`      | Python   |   875 |
+|    5 | `src/requests/sessions.py` | Python   |   758 |
+|    6 | `src/requests/adapters.py` | Python   |   634 |
+|    7 | `src/requests/cookies.py`  | Python   |   503 |
+|    8 | `tests/test_lowlevel.py`   | Python   |   329 |
+|    9 | `docs/conf.py`             | Python   |   291 |
+|   10 | `src/requests/auth.py`     | Python   |   283 |
+
+### Observation
+
+`tests/test_requests.py` is the largest source file with **2,597 LOC**. This indicates that the project has a substantial automated test suite for validating the behavior of the Requests library.
+
+---
+
+# 8. File-Level Metrics
+
+A detailed file-level dataset was generated and stored in:
+
+```text
+Output/file_metrics.csv
+```
+
+The CSV contains the following fields:
+
+```text
+file_path
+language
+extension
+loc
+size_bytes
+```
+
+### Example
+
+```text
 file_path,language,extension,loc,size_bytes
-
-The dataset is available at:
-
-requests/mining/file_metrics.csv
-
-Example:
-
+docs/_static/custom.css,CSS,.css,8,287
+docs/_templates/sidebar.html,HTML,.html,26,1361
+docs/_themes/flask_theme_support.py,Python,.py,74,4875
 docs/conf.py,Python,.py,291,12148
-src/requests/**init**.py,Python,.py,184,5637
-src/requests/models.py,Python,.py,988,41462
+setup.py,Python,.py,6,179
+src/requests/__init__.py,Python,.py,184,5637
+```
 
-## 9. Git History Analysis
+This dataset can be used for further analysis of source-code size and file complexity.
 
-| Metric                          |        Result |
-| ------------------------------- | ------------: |
-| Total Commits                   |         6,494 |
-| Contributor Identities          |           841 |
-| Most Active Contributor         | Kenneth Reitz |
-| Most Active Contributor Commits |         2,142 |
-| Average Files Changed / Month   |         46.74 |
-| Average Additions / Commit      |         25.66 |
-| Average Deletions / Commit      |         21.06 |
+---
 
-## 10. Most Frequently Changed Files
+# 9. Git History Mining
+
+Git history was analyzed to understand the development activity of the repository.
+
+The analysis includes:
+
+- Total number of commits
+- Contributor activity
+- Frequently changed files
+- Commits per month
+- Files changed per month
+- Lines added
+- Lines deleted
+
+---
+
+## 9.1 Total Commits
+
+The repository contains:
+
+**6,494 commits**
+
+This indicates a long development history with substantial ongoing maintenance and contributions.
+
+---
+
+## 9.2 Contributors
+
+The analysis identified:
+
+**841 Git author identities**
+
+> Note: Contributor count represents Git author identities based on author name and email. Different identities may belong to the same person.
+
+### Most Active Contributor
+
+**Kenneth Reitz [me@kennethreitz.com](mailto:me@kennethreitz.com)**
+
+Number of commits:
+
+**2,142**
+
+Kenneth Reitz is therefore the most active contributor according to the mined Git history.
+
+---
+
+# 10. Most Frequently Changed Files
+
+The following files have been changed most frequently according to the Git history analysis:
 
 | Rank | File                     | Changes |
 | ---: | ------------------------ | ------: |
@@ -158,98 +266,214 @@ src/requests/models.py,Python,.py,988,41462
 |    9 | `docs/index.rst`         |     188 |
 |   10 | `setup.py`               |     184 |
 
-## 11.Commits Per Month
+### Observation
 
-| Month   | Commits |
-| ------- | ------: |
-| 2011-02 |     194 |
-| 2011-03 |      14 |
-| 2011-04 |      24 |
-| 2011-05 |     121 |
-| 2011-06 |      58 |
-| 2011-07 |      24 |
-| 2011-08 |     221 |
-| 2011-09 |     105 |
-| 2011-10 |     237 |
+`requests/models.py` has the highest number of recorded changes with **761 changes**.
 
-## 12. Generated Files
+This suggests that the file has been an important part of the project's evolution and has undergone frequent modification throughout its development history.
 
-The mining process generated three datasets:
+> Historical Git paths may differ from the repository's current paths because files can be moved or renamed over time.
 
-file_metrics.csv
+---
 
-Contains file-level source-code metrics:
+# 11. Commits Per Month
 
-File path
-Programming language
-Extension
-LOC
-File size
-git_history.csv
+Monthly Git history was extracted into:
 
-Contains monthly Git history metrics:
+```text
+Output/git_history.csv
+```
 
-Month
-Number of commits
-Files changed
-Additions
-Deletions
-repository_stats.json
+The dataset contains:
 
-Contains the complete repository inventory and Git-history statistics in JSON format.
+```text
+month
+commits
+files_changed
+additions
+deletions
+```
 
-## 13. Mining Script
+### Example
 
-The repository was analyzed using:
+```text
+month,commits,files_changed,additions,deletions
+2011-02,194,212,3905,1659
+2011-03,14,15,78,32
+2011-04,24,19,526,77
+2011-05,121,165,2924,1403
+2011-06,58,69,2798,278
+2011-07,24,24,179,38
+2011-08,221,240,2499,1177
+2011-09,105,175,2923,2432
+2011-10,237,287,4554,2623
+```
 
-requests/mine_repository.py
+The complete monthly history is available in the CSV file.
 
-The Python script performs:
+---
 
-1 Repository traversal
-2 File counting
-3 Directory counting
-4 Source-code identification
-5 LOC calculation
-6 File-size calculation
-7 Language identification
-8 File-type distribution
-9 Largest-file analysis
-10 Git commit analysis
-11 Contributor analysis
-12 Frequently changed file analysis
-13 Monthly Git activity analysis
-14 CSV generation
-15 JSON generation
+# 12. Git Activity Statistics
 
-## 14. Key Findings
+The following averages were calculated from the Git history:
 
-The analysis shows that:
+| Metric                  |   Average |
+| ----------------------- | --------: |
+| Files Changed per Month | **46.74** |
+| Additions per Commit    | **25.66** |
+| Deletions per Commit    | **21.06** |
 
-The repository contains 128 files and 25 directories.
-There are 39 identified source-code files.
-Python is the dominant programming language.
-The repository contains approximately 9,875 non-empty source-code lines.
-tests/test_requests.py is the largest identified source file.
-The repository has 6,494 commits, showing extensive development history.
-Git records 841 contributor identities.
-Kenneth Reitz is the most active recorded contributor by commit count.
-requests/models.py is the most frequently changed historical file.
-Git activity varies significantly across different periods of the project's development.
+These metrics provide an overview of the repository's development activity.
 
-## 15. Conclusion
+---
 
-This lab demonstrated how software repository mining can be used to understand both the current structure and historical evolution of a software project.
+# 13. Generated Output Files
 
-The analysis combined Python-based static file profiling with Git history mining to extract measurable information about source code, files, contributors, commits, and development activity.
+The mining process generates three main output files.
 
-The resulting CSV and JSON datasets provide structured data that can be used for further software engineering and DevOps analysis.
+### 1. `file_metrics.csv`
 
-## 16. Tools Used
+Location:
 
-Python 3
-Git
-GitHub
-CSV
-JSON
-macOS Terminal
+```text
+Output/file_metrics.csv
+```
+
+Contains file-level information including:
+
+- File path
+- Programming language
+- Extension
+- LOC
+- File size in bytes
+
+---
+
+### 2. `git_history.csv`
+
+Location:
+
+```text
+Output/git_history.csv
+```
+
+Contains monthly Git statistics including:
+
+- Month
+- Number of commits
+- Files changed
+- Lines added
+- Lines deleted
+
+---
+
+### 3. `repository_stats.json`
+
+Location:
+
+```text
+Output/repository_stats.json
+```
+
+Contains the complete repository inventory and Git history summary in JSON format.
+
+---
+
+# 14. Mining Script
+
+The repository was analyzed using the Python script:
+
+```text
+src/mine_repository.py
+```
+
+The script performs the following operations:
+
+1. Walks through the repository.
+2. Counts files and directories.
+3. Identifies programming languages based on file extensions.
+4. Calculates non-empty LOC.
+5. Calculates file sizes.
+6. Identifies the largest source files.
+7. Calculates file-type distribution.
+8. Analyzes Git commit history.
+9. Counts contributors.
+10. Identifies the most active contributor.
+11. Identifies frequently changed files.
+12. Calculates monthly commit statistics.
+13. Calculates additions and deletions.
+14. Generates CSV and JSON output files.
+
+---
+
+# 15. Tools Used
+
+The following tools and technologies were used:
+
+- **Git**
+- **GitHub**
+- **Python**
+- **CSV**
+- **JSON**
+- **Terminal / Command Line**
+- **Git log**
+- **Git numstat**
+
+---
+
+# 16. Key Findings
+
+The main findings from the repository mining exercise are:
+
+1. The Requests repository contains **128 files** and **25 directories**.
+2. There are **39 source-code files**.
+3. **Python** is the primary programming language.
+4. The repository contains **9,875 non-empty lines of code**.
+5. `tests/test_requests.py` is the largest source file with **2,597 LOC**.
+6. The repository has **6,494 commits**.
+7. The Git history contains **841 author identities**.
+8. **Kenneth Reitz** is the most active contributor with **2,142 commits**.
+9. `requests/models.py` has the highest number of historical changes with **761 changes**.
+10. The average number of files changed per month is **46.74**.
+11. The average number of additions per commit is **25.66**.
+12. The average number of deletions per commit is **21.06**.
+
+---
+
+# 17. Conclusion
+
+This lab demonstrates how software repositories can be systematically mined and profiled using Git and Python.
+
+The analysis provides both **static repository information** and **historical development information**. Static analysis helps understand the size, structure, languages, and source-code distribution of the project, while Git history analysis provides insights into contributors, development activity, frequently modified files, and code changes over time.
+
+The generated CSV and JSON datasets can also be used for further software analytics and visualization.
+
+---
+
+## Lab 1 Summary
+
+**Repository:** `psf/requests`
+
+**Total Files:** 128
+
+**Source Files:** 39
+
+**Directories:** 25
+
+**Total LOC:** 9,875
+
+**Total Commits:** 6,494
+
+**Contributors:** 841
+
+**Most Active Contributor:** Kenneth Reitz
+
+**Largest Source File:** `tests/test_requests.py` — 2,597 LOC
+
+**Most Changed File:** `requests/models.py` — 761 changes
+
+**Average Files Changed/Month:** 46.74
+
+**Average Additions/Commit:** 25.66
+
+**Average Deletions/Commit:** 21.06
