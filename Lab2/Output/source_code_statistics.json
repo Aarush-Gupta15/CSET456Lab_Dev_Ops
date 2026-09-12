@@ -1,0 +1,24 @@
+{
+    "total_records": 2623,
+    "total_repositories": 5,
+    "total_loc": 604468,
+    "total_size_bytes": 25004678,
+    "languages": {
+        "Python": 2568,
+        "Shell": 29,
+        "JavaScript": 11,
+        "C/C++": 7,
+        "C++": 5,
+        "C": 3
+    },
+    "extensions": {
+        ".py": 2568,
+        ".sh": 29,
+        ".js": 11,
+        ".h": 7,
+        ".cpp": 5,
+        ".c": 3
+    },
+    "test_files": 1125,
+    "non_test_files": 1498
+}

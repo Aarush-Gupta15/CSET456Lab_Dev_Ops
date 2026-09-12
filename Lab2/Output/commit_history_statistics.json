@@ -1,0 +1,11 @@
+{
+    "total_records": 71487,
+    "total_repositories": 5,
+    "total_authors": 6947,
+    "total_files_changed": 187535,
+    "total_additions": 6999081,
+    "total_deletions": 5796290,
+    "total_churn": 12795371,
+    "merge_commits": 10897,
+    "non_merge_commits": 60590
+}

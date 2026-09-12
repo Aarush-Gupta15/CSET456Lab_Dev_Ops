@@ -1,0 +1,10 @@
+{
+    "total_records": 2623,
+    "total_repositories": 5,
+    "total_loc": 604468,
+    "total_churn": 1786430,
+    "files_with_history": 2622,
+    "files_without_history": 1,
+    "average_loc": 230.45,
+    "average_churn": 681.06
+}
