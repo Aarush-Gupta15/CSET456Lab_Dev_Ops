@@ -1,0 +1,10 @@
+{
+    "tokenizer": "character",
+    "total_files": 2623,
+    "vocabulary_size": 296,
+    "total_tokens": 25000932,
+    "average_sequence_length": 9531.426610751048,
+    "minimum_sequence_length": 0,
+    "maximum_sequence_length": 394863,
+    "empty_sequences": 253
+}

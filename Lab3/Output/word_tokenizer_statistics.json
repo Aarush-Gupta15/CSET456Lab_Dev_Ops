@@ -1,0 +1,10 @@
+{
+    "tokenizer": "word",
+    "total_files": 2623,
+    "vocabulary_size": 72246,
+    "total_tokens": 5171379,
+    "average_sequence_length": 1971.551277163553,
+    "minimum_sequence_length": 0,
+    "maximum_sequence_length": 41770,
+    "empty_sequences": 253
+}
