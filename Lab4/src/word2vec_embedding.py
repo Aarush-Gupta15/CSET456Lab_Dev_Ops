@@ -55,10 +55,13 @@ def main():
     pairs.sort(key=lambda x:x[2],reverse=True); OUT.mkdir(parents=True,exist_ok=True)
     with (OUT/"word2vec_embeddings.csv").open("w",newline="",encoding="utf-8") as f:
         w=csv.writer(f); w.writerow(["token"]+[f"dim_{i}" for i in range(DIM)]); w.writerows([t,*vec[t].tolist()] for t in selected)
+    with (OUT/"word2vec_model.csv").open("w",newline="",encoding="utf-8") as f:
+        w=csv.writer(f); w.writerow(["token"]+[f"input_{i}" for i in range(DIM)]+[f"output_{i}" for i in range(DIM)])
+        w.writerows([t,*w_in[ids[t]].tolist(),*w_out[ids[t]].tolist()] for t in vocab)
     with (OUT/"word2vec_similarity.csv").open("w",newline="",encoding="utf-8") as f:
         w=csv.writer(f); w.writerow(["token_1","token_2","cosine_similarity"]); w.writerows((a,b,f"{s:.6f}") for a,b,s in pairs)
     print("Selected:",", ".join(selected)); print("Top 5:")
     for i,(a,b,s) in enumerate(pairs[:5],1): print(f"{i}. {a} <-> {b} = {s:.6f}")
-    print("Saved embeddings, similarities, and model arrays in CSV embeddings.")
+    print("Saved selected embeddings, all similarities, and full input/output matrices to Lab4/Data/word2vec_model.csv")
 
 if __name__=="__main__": main()
