@@ -1,0 +1,12 @@
+===== CUSTOM EMBEDDING APPROACH 2: TF-IDF CONTEXT =====
+Corpus: Lab3/Data/source_code_corpus.csv; non-empty tokenized records: 2370
+Vocabulary cap: 500; context window: 2; seed: 42
+Selected tokens: coef, on, if, integer, score, samples, py, title, id, x, zeros, given, are, global_random_seed, __init__, and, from, random_state, should, each
+Embedding: raw co-occurrence counts multiplied by context IDF; dimension: 500
+Top 5 pairs:
+1. title <-> id = 0.830668
+2. integer <-> id = 0.818635
+3. integer <-> title = 0.794328
+4. on <-> given = 0.788930
+5. if <-> score = 0.687649
+Saved Lab4/Data/custom_embedding_2.csv and custom_embedding_2_similarity.csv

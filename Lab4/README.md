@@ -73,7 +73,7 @@ Lab4/
         ├── ...
 ```
 
-The exact files will be added as each experiment is implemented.
+Source, generated CSVs, and experiment logs are stored in the directories above.
 
 ---
 
@@ -81,58 +81,46 @@ The exact files will be added as each experiment is implemented.
 
 ## 5.1 Approach
 
-The first embedding approach will be designed independently.
+The first embedding approach is a custom token co-occurrence baseline.
 
 ### Thought Process
 
-The approach will be based on:
-
-- [To be documented after implementation]
-- [Why this representation was selected]
-- [What information the representation is expected to capture]
-- [Expected advantages]
-- [Expected limitations]
+The approach is a raw token co-occurrence matrix. Each token is represented by its counts of neighboring tokens within a two-token window. I chose this transparent baseline so each vector dimension has a direct meaning (one context token); it can reveal usage patterns but does not encode syntax trees or learn compressed latent features.
 
 ## 5.2 Token Selection
 
-Twenty tokens will be selected manually and randomly from the source-code vocabulary.
-
-The selected tokens will be recorded here after the experiment is executed.
+Twenty identifier-like tokens were sampled reproducibly from the corpus vocabulary with seed 42 and then manually inspected for interpretation.
 
 | No. | Token |
 | --: | ----- |
-|   1 | TBD   |
-|   2 | TBD   |
-|   3 | TBD   |
-|   4 | TBD   |
-|   5 | TBD   |
-|   6 | TBD   |
-|   7 | TBD   |
-|   8 | TBD   |
-|   9 | TBD   |
-|  10 | TBD   |
-|  11 | TBD   |
-|  12 | TBD   |
-|  13 | TBD   |
-|  14 | TBD   |
-|  15 | TBD   |
-|  16 | TBD   |
-|  17 | TBD   |
-|  18 | TBD   |
-|  19 | TBD   |
-|  20 | TBD   |
+| 1 | `coef` |
+| 2 | `on` |
+| 3 | `if` |
+| 4 | `integer` |
+| 5 | `score` |
+| 6 | `samples` |
+| 7 | `py` |
+| 8 | `title` |
+| 9 | `id` |
+| 10 | `x` |
+| 11 | `zeros` |
+| 12 | `given` |
+| 13 | `are` |
+| 14 | `global_random_seed` |
+| 15 | `__init__` |
+| 16 | `and` |
+| 17 | `from` |
+| 18 | `random_state` |
+| 19 | `should` |
+| 20 | `each` |
 
 ## 5.3 Embedding Generation
 
-Embeddings will be generated for all 20 selected tokens.
-
-The implementation and generated data will be stored in the `src/` and `Data/` directories.
+The implementation (`src/custom_embedding_1.py`) produces dense 500-dimensional count vectors for the 20 tokens. It read 2,370 non-empty records from `Lab3/Data/source_code_corpus.csv`; output is `Data/custom_embedding_1.csv`.
 
 ## 5.4 Cosine Similarity
 
-Pairwise cosine similarity will be calculated between all selected token embeddings.
-
-The resulting similarities will be analyzed to determine which tokens have the most similar representations.
+Cosine similarity was calculated for all 190 unique pairs and saved to `Data/custom_embedding_1_similarity.csv`.
 
 ## 5.5 Five Most Similar Pairs
 
@@ -140,22 +128,15 @@ The five most similar token pairs will be reported after the experiment.
 
 | Rank | Token 1 | Token 2 | Cosine Similarity |
 | ---: | ------- | ------- | ----------------: |
-|    1 | TBD     | TBD     |               TBD |
-|    2 | TBD     | TBD     |               TBD |
-|    3 | TBD     | TBD     |               TBD |
-|    4 | TBD     | TBD     |               TBD |
-|    5 | TBD     | TBD     |               TBD |
+| 1 | `integer` | `title` | 0.880550 |
+| 2 | `integer` | `id` | 0.879432 |
+| 3 | `title` | `id` | 0.861403 |
+| 4 | `on` | `given` | 0.842114 |
+| 5 | `score` | `x` | 0.817272 |
 
 ## 5.6 Analysis
 
-The similarity results will be analyzed based on the expected relationship between the source-code tokens.
-
-Questions considered:
-
-- Do semantically related tokens receive similar representations?
-- Do syntactically related tokens receive similar representations?
-- Are common programming-language tokens grouped together?
-- Are unrelated tokens incorrectly considered similar?
+`on`/`given` and `score`/`x` plausibly share some local usage patterns, though the model has no semantic labels. The leading `integer`/`title` and `integer`/`id` pairs are false semantic matches: their names imply different roles, but the count vectors overlap on nearby context tokens. The score is evidence of shared local context only.
 
 ## 5.7 Representation Failures
 
@@ -163,8 +144,8 @@ At least two failure cases will be identified.
 
 | Case | Tokens | Observation |
 | ---- | ------ | ----------- |
-| 1    | TBD    | TBD         |
-| 2    | TBD    | TBD         |
+| 1 | `integer` / `title` | Similarity 0.880550 comes from overlapping neighboring-token counts; a numeric value and display label are not interchangeable. |
+| 2 | `integer` / `id` | Similarity 0.879432 shows the fixed window cannot distinguish an integer role from an identifier role when nearby token patterns overlap. |
 
 ---
 
@@ -172,45 +153,39 @@ At least two failure cases will be identified.
 
 ## 6.1 Approach
 
-A second embedding approach will be developed independently from the first approach.
+A second, distinct custom approach is implemented in `src/custom_embedding_2.py`.
 
 ### Thought Process
 
-The approach will be based on:
-
-- [To be documented after implementation]
-- [Why this representation was selected]
-- [Expected advantages]
-- [Expected limitations]
-- [Difference from Approach 1]
+It starts with the same two-token co-occurrence counts, then multiplies each context column by smoothed inverse document frequency: `idf(c) = log((1 + N) / (1 + df(c))) + 1`, where `df(c)` counts corpus records containing context token `c`. This down-weights contexts present in many files. I chose this weighting to test whether rarer, more discriminative contexts improve pairwise separation. Unlike Approach 1, vector dimensions are weighted counts; it remains a hand-built context model and does not learn latent dimensions.
 
 ## 6.2 Token Selection
 
 The experiment will use 20 selected tokens.
 
-The exact tokens and selection process will be documented after implementation.
+The same seed-42 sample as Approach 1 is used for a direct comparison: `coef`, `on`, `if`, `integer`, `score`, `samples`, `py`, `title`, `id`, `x`, `zeros`, `given`, `are`, `global_random_seed`, `__init__`, `and`, `from`, `random_state`, `should`, `each`. Vocabulary size is capped at 500; context window is 2; input is the 2,370 non-empty Lab 3 records.
 
 ## 6.3 Embedding Generation
 
-Embeddings will be generated for the selected tokens using the second approach.
+Each selected token gets a dense 500-dimensional TF-IDF-weighted context vector in `Data/custom_embedding_2.csv`.
 
 ## 6.4 Cosine Similarity
 
-Pairwise cosine similarity will be calculated between all token embeddings.
+All 190 pairwise cosine similarities are saved to `Data/custom_embedding_2_similarity.csv`.
 
 ## 6.5 Five Most Similar Pairs
 
 | Rank | Token 1 | Token 2 | Cosine Similarity |
 | ---: | ------- | ------- | ----------------: |
-|    1 | TBD     | TBD     |               TBD |
-|    2 | TBD     | TBD     |               TBD |
-|    3 | TBD     | TBD     |               TBD |
-|    4 | TBD     | TBD     |               TBD |
-|    5 | TBD     | TBD     |               TBD |
+| 1 | `title` | `id` | 0.830668 |
+| 2 | `integer` | `id` | 0.818635 |
+| 3 | `integer` | `title` | 0.794328 |
+| 4 | `on` | `given` | 0.788930 |
+| 5 | `if` | `score` | 0.687649 |
 
 ## 6.6 Analysis
 
-The similarity results will be analyzed to determine whether the representation captures meaningful relationships between source-code tokens.
+The leading `title`/`id` and `on`/`given` pairs retain local-context overlap after weighting. Compared with raw counts, `integer`/`title` falls from 0.880550 to 0.794328, while `title`/`id` falls from 0.861403 to 0.830668. This indicates IDF weighting changed the geometry, but it did not remove ambiguous contexts.
 
 ## 6.7 Representation Failures
 
@@ -218,14 +193,14 @@ At least two failure cases will be documented.
 
 | Case | Tokens | Observation |
 | ---- | ------ | ----------- |
-| 1    | TBD    | TBD         |
-| 2    | TBD    | TBD         |
+| 1 | `integer` / `title` | Still scores 0.794328 despite distinct identifier roles; rare-context weighting cannot infer semantic types. |
+| 2 | `if` / `score` | Similarity 0.687649 is an implausible semantic match; shared nearby syntax and identifier contexts contribute even after common context columns are down-weighted. |
 
 ---
 
 # 7. Experiment 3 — Word2Vec
 
-Word2Vec will be implemented to learn distributed representations of source-code tokens based on their surrounding context.
+Word2Vec uses a skip-gram objective to learn distributed representations of source-code tokens based on surrounding context.
 
 The implementation will include:
 
@@ -238,63 +213,59 @@ The implementation will include:
 
 ## 7.1 Word2Vec Configuration
 
-The final configuration will be documented after implementation.
+The implementation is an educational NumPy skip-gram with negative sampling. Gensim was absent from the existing Python 3.14 virtual environment, so this dependency-free implementation makes the training objective explicit.
 
 | Parameter       | Value |
 | --------------- | ----- |
-| Vector size     | TBD   |
-| Window          | TBD   |
-| Minimum count   | TBD   |
-| Training epochs | TBD   |
-| Corpus size     | TBD   |
+| Vector size | 50 |
+| Window | 5 tokens |
+| Minimum count | 2 |
+| Training epochs | 1 |
+| Records | 300 reproducibly sampled from 2,370 non-empty records |
+| Tokens per record | first 120; seed 42 |
+| Vocabulary | 1,662 after min-count filtering (10,000 cap) |
+| Training pairs | 295,190; 3 negative samples; one worker |
 
 ## 7.2 Results
 
-The results will be recorded after training.
+`src/word2vec_embedding.py` writes selected 50-dimensional vectors to `Data/word2vec_embeddings.csv`, all 190 pair similarities to `Data/word2vec_similarity.csv`, and the full 1,662-token input/output parameter matrices to `Data/word2vec_model.csv`. Seed 42 selected `has_app_context`, `model_name`, `item_id`, `targets`, `called`, `low`, `abstractmethod`, `reason`, `successful`, `ignore`, `needed`, `tag`, `_LIBSVM_H`, `order`, `confidence`, `plt`, `param`, `that`, `itertools`, `RegressorMixin`.
 
 ## 7.3 Observations
 
-Observations about Word2Vec will be documented after the experiment.
+Top pairs were `reason`/`order` (0.986384), `model_name`/`item_id` (0.979879), `abstractmethod`/`itertools` (0.965070), `has_app_context`/`abstractmethod` (0.962709), and `low`/`reason` (0.961534). The very high scores, including the questionable `abstractmethod`/`itertools` pair, show that one sampled pass over a small corpus can produce noisy neighborhoods. These are dense learned vectors, unlike the 500 named context dimensions of the custom models. The bounded sample and one epoch limit coverage and training; results are not a quality ranking.
 
 ---
 
 # 8. Experiment 4 — Code2Vec
 
-Code2Vec will be implemented to learn representations specifically from source-code structure.
+`src/code2vec_embedding.py` is a practical educational implementation inspired by Code2Vec. It uses Python's `ast` module to count identifier occurrences by their last six AST ancestor/node types and compares those path-feature vectors. It does not reproduce Code2Vec's neural attention architecture or learned code vectors.
 
-The experiment will investigate how structural information from source code can be used to create meaningful code representations.
-
-The implementation will document:
-
-- Source-code preprocessing
-- Representation of code structure
-- Context extraction
-- Embedding generation
-- Similarity analysis
-- Observed limitations
+Only Python records from the Lab 3 corpus are parsed; non-Python and blank records are skipped. Syntax and AST errors are caught per file. Of 2,623 corpus rows, the run parsed 2,315 Python files, skipped 55 non-Python records and 253 blanks, and encountered 0 parse failures. Identifier vectors count path signatures; the selected 20 identifier names are chosen with seed 42. The union of their path dimensions was 60.
 
 ## 8.1 Results
 
-Results will be added after implementation.
+Outputs are `Data/code2vec_embeddings.csv` and `Data/code2vec_similarity.csv`. The five leading pairs were `test_reconstruct_patches_perfect`/`test_mds_recovers_true_data` (1.000000), `test_reconstruct_patches_perfect`/`test_should_do_markup_FORCE_COLOR` (1.000000), `test_mds_recovers_true_data`/`test_should_do_markup_FORCE_COLOR` (1.000000), `_validate_multiclass_probabilistic_prediction`/`_get_transformer_list` (0.707107), and `broken_dep`/`test_reconstruct_patches_perfect` (0.707107).
 
 ## 8.2 Observations
 
-Observations about Code2Vec will be documented after the experiment.
+The identical test-name similarities are a concrete failure: this implementation represents identifier roles with short ancestor-path counts, so unrelated test identifiers with repeated AST shapes can have identical vectors. It also ignores terminal values and relationships between paired leaves, handles Python only, and has no learned parameters. Its structural features differ from token windows, but this simplified representation should not be mistaken for the original Code2Vec model.
 
 ---
 
 # 9. Comparison of Embedding Approaches
 
-The custom embeddings will be compared with Word2Vec and Code2Vec.
+The custom embeddings are compared with Word2Vec and Code2Vec below.
 
 | Feature              | Custom Approach 1 | Custom Approach 2 | Word2Vec           | Code2Vec    |
 | -------------------- | ----------------- | ----------------- | ------------------ | ----------- |
-| Input                | TBD               | TBD               | Source-code tokens | Source code |
-| Representation       | TBD               | TBD               | TBD                | TBD         |
-| Context awareness    | TBD               | TBD               | TBD                | TBD         |
-| Structural awareness | TBD               | TBD               | TBD                | TBD         |
-| Main advantage       | TBD               | TBD               | TBD                | TBD         |
-| Main limitation      | TBD               | TBD               | TBD                | TBD         |
+| Input | Lab 3 token streams | Lab 3 token streams | Sampled Lab 3 token streams | Python source parsed as AST |
+| Representation | 500 raw count dimensions | 500 IDF-weighted count dimensions | Learned 50-dimensional skip-gram vectors | Counts over AST ancestor-path signatures |
+| Context awareness | Symmetric 2-token window | Symmetric 2-token window | 5-token training window | AST node ancestry, up to 6 node types |
+| Structural awareness | None | None | None explicitly | Limited AST path shape |
+| Dense/Sparse | Dense saved rows from sparse counts | Dense saved rows from sparse counts | Dense | Sparse path counts, emitted as dense CSV columns |
+| Interpretability | Named context counts | Named weighted context counts | Latent dimensions | Path signatures are inspectable |
+| Main advantage | Simple and auditable | Down-weights corpus-wide contexts | Learns compact distributed vectors | Includes syntax-tree path shape |
+| Main limitation | Frequent/noisy contexts and no structure | Still context-count based | Small one-epoch sample yields unstable neighborhoods | Educational path counts, not original Code2Vec |
 
 ---
 
@@ -314,7 +285,7 @@ The comparison will focus on:
 
 ### Observations
 
-The final observations will be added after both experiments have been completed.
+On the shared 20-token sample, the custom raw co-occurrence top pair was `integer`/`title` at 0.880550; IDF context weighting changed it to 0.794328. Word2Vec instead selected its own 20 tokens from the bounded training vocabulary and ranked `reason`/`order` first at 0.986384, with `abstractmethod`/`itertools` at 0.965070. The score scales are not directly comparable because the token sets, dimensions, and learning procedures differ. Custom vectors expose context dimensions, while Word2Vec's 50 dimensions are latent and trained from positive and negative pairs. The observed Word2Vec pairs demonstrate noisy similarity, not superior semantics. Its 300-record, one-epoch run is computationally manageable but has less corpus coverage than the custom methods.
 
 ---
 
@@ -326,18 +297,7 @@ Screenshots documenting the experimental process will be stored in:
 Lab4/Output/screenshots/
 ```
 
-The screenshots will include:
-
-- Initial prompts for each experiment
-- Token selection
-- Embedding generation
-- Similarity calculations
-- Word2Vec execution
-- Code2Vec execution
-- Important intermediate results
-- Final results
-
-The first few prompts for each experiment will be captured as required by the lab instructions.
+Terminal capture tooling is not available in this environment, so no screenshot images are claimed. Actual command output will be preserved as plain text in `Output/terminal_logs/`. This documents experiment execution/results but does not satisfy the manual's image screenshot requirement; the initial chat prompts also cannot be captured as terminal screenshots.
 
 ---
 
@@ -374,16 +334,12 @@ Data generated during the experiments will be documented so that the results can
 
 # 14. Key Findings
 
-This section will contain the final findings from the experiments.
+The co-occurrence and TF-IDF experiments produce interpretable context profiles but preserve semantic ambiguity. In the measured comparison, IDF weighting reduced `integer`/`title` similarity from 0.880550 to 0.794328. The Word2Vec sample learned compact dense vectors, but its high `abstractmethod`/`itertools` similarity illustrates noisy associations. The AST path-count experiment used structural features, yet three different test identifiers had identical feature vectors and cosine 1.0. None of these experiments measures task accuracy.
 
-Important observations will include:
-
-1. How the two custom embedding approaches represent source-code tokens.
-2. Which token relationships were captured successfully.
-3. Where the representations failed.
-4. How Word2Vec represents source-code tokens.
-5. How Code2Vec differs from token-level embeddings.
-6. Differences between Word2Vec and the custom embeddings.
+1. The two custom approaches use raw counts versus IDF-weighted context counts; IDF reduced but did not remove the `integer`/`title` overlap.
+2. Word2Vec produced dense 50-dimensional vectors, with noisy high similarities on its limited sample.
+3. AST path counts expose tree ancestry but collapsed three distinct test identifiers to identical vectors.
+4. The three approaches differ in token coverage, dimensions, interpretability, and structural signal; their cosine scores do not establish a universal ranking.
 
 ---
 
@@ -391,9 +347,7 @@ Important observations will include:
 
 This lab explores different techniques for representing source code as numerical embeddings.
 
-The experiments will demonstrate the relationship between tokenization, embeddings, contextual similarity, and source-code structure.
-
-The final conclusion will be updated after completing all experiments and comparing the results.
+The experiments show four different representations of the same Lab 3 source corpus: raw local counts, IDF-weighted contexts, learned skip-gram vectors, and simplified AST path counts. Their similarity scores reflect the specific representation and sample used; they should not be interpreted as correctness scores or a universal ranking. The Code2Vec experiment is explicitly educational rather than a reproduction of the original model.
 
 ---
 
@@ -401,24 +355,24 @@ The final conclusion will be updated after completing all experiments and compar
 
 Before submission, verify the following:
 
-- [ ] Two custom embedding approaches implemented
-- [ ] 20 tokens selected for experiments
-- [ ] Embeddings generated
-- [ ] Pairwise cosine similarity calculated
-- [ ] Five most similar pairs identified
-- [ ] Similarity results analyzed
-- [ ] At least two representation failures identified
-- [ ] Word2Vec implemented
-- [ ] Code2Vec implemented
-- [ ] Word2Vec compared with custom embedding
-- [ ] Thought process documented
-- [ ] Observations documented
-- [ ] Screenshots added to `Output/screenshots/`
-- [ ] Source code added to `src/`
-- [ ] Data added to `Data/`
-- [ ] README completed
-- [ ] Changes committed to Git
-- [ ] Changes pushed to GitHub
+- [x] Two custom embedding approaches implemented
+- [x] 20 tokens selected for each custom experiment
+- [x] Embeddings generated
+- [x] Pairwise cosine similarity calculated
+- [x] Five most similar pairs identified for each experiment
+- [x] Similarity results analyzed
+- [x] At least two representation failures identified for each custom approach
+- [x] Word2Vec implemented
+- [x] Code2Vec-inspired AST path experiment implemented
+- [x] Word2Vec compared with custom embedding
+- [x] Thought process documented
+- [x] Observations documented
+- [ ] Screenshot images of prompts/results added to `Output/screenshots/` (not capturable in this environment; terminal logs are provided instead)
+- [x] Source code added to `src/`
+- [x] Data added to `Data/`
+- [x] README completed
+- [x] Changes committed to Git
+- [x] Changes pushed to GitHub
 
 ---
 

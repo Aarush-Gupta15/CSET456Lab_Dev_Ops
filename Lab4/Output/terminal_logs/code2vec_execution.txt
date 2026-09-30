@@ -1,0 +1,11 @@
+===== EDUCATIONAL CODE2VEC-INSPIRED AST PATH EXPERIMENT =====
+Python files parsed: 2315; parse failures skipped: 0; non-Python records skipped: 55; blank records skipped: 253; seed: 42
+Selected 20 identifier tokens; union path-feature dimension: 60
+Selected: _validate_multiclass_probabilistic_prediction, LARGE_PAYLOAD, last_bin_idx, has_terminalreporter, for_partial_fit, broken_dep, _path_residuals, test_reconstruct_patches_perfect, _effective_low_priority_routes_version, timeout, target_filepath, NaiveSplitter, ModuleSpec, _get_transformer_list, finish1, get_exconly, test_mds_recovers_true_data, unlabeled_set, LocalOutlierFactor, test_should_do_markup_FORCE_COLOR
+Top 5 cosine pairs:
+1. test_reconstruct_patches_perfect <-> test_mds_recovers_true_data = 1.000000
+2. test_reconstruct_patches_perfect <-> test_should_do_markup_FORCE_COLOR = 1.000000
+3. test_mds_recovers_true_data <-> test_should_do_markup_FORCE_COLOR = 1.000000
+4. _validate_multiclass_probabilistic_prediction <-> _get_transformer_list = 0.707107
+5. broken_dep <-> test_reconstruct_patches_perfect = 0.707107
+Saved Lab4/Data/code2vec_embeddings.csv and code2vec_similarity.csv

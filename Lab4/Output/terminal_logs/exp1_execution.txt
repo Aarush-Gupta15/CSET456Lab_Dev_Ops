@@ -1,0 +1,54 @@
+===== CUSTOM EMBEDDING APPROACH 1 =====
+
+[1] Loading Lab 3 corpus...
+Documents loaded: 2370
+
+[2] Building vocabulary...
+Vocabulary size: 500
+
+[3] Building co-occurrence matrix...
+Co-occurrence matrix created.
+
+[4] Creating embeddings...
+Embedding dimension: 500
+
+[5] Selecting 20 tokens...
+
+Selected tokens:
+ 1. coef
+ 2. on
+ 3. if
+ 4. integer
+ 5. score
+ 6. samples
+ 7. py
+ 8. title
+ 9. id
+10. x
+11. zeros
+12. given
+13. are
+14. global_random_seed
+15. __init__
+16. and
+17. from
+18. random_state
+19. should
+20. each
+
+[6] Calculating pairwise cosine similarity...
+
+===== TOP 5 MOST SIMILAR PAIRS =====
+1. integer <-> title = 0.880550
+2. integer <-> id = 0.879432
+3. title <-> id = 0.861403
+4. on <-> given = 0.842114
+5. score <-> x = 0.817272
+
+[7] Saving embeddings...
+Saved: Lab4/Data/custom_embedding_1.csv
+
+[8] Saving similarity results...
+Saved: Lab4/Data/custom_embedding_1_similarity.csv
+
+===== EXPERIMENT COMPLETED =====

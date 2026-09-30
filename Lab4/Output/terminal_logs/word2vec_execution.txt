@@ -1,0 +1,12 @@
+Skip-gram negative sampling; corpus=Lab3/Data/source_code_corpus.csv; records=300; vocab=1662
+seed=42, vector_size=50, window=5, min_count=2, epochs=1, workers=1, negatives=3; sampled records=300, token cap/record=120, vocabulary cap=10000
+Training pairs=295190
+Finished epoch 1/1
+Selected: has_app_context, model_name, item_id, targets, called, low, abstractmethod, reason, successful, ignore, needed, tag, _LIBSVM_H, order, confidence, plt, param, that, itertools, RegressorMixin
+Top 5:
+1. reason <-> order = 0.986384
+2. model_name <-> item_id = 0.979879
+3. abstractmethod <-> itertools = 0.965070
+4. has_app_context <-> abstractmethod = 0.962709
+5. low <-> reason = 0.961534
+Saved selected embeddings, all similarities, and full input/output matrices to Lab4/Data/word2vec_model.csv
